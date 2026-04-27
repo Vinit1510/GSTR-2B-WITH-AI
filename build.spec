@@ -8,6 +8,7 @@
 import os
 import sys
 from pathlib import Path
+from PyInstaller.utils.hooks import collect_data_files
 
 block_cipher = None
 
@@ -44,8 +45,8 @@ datas = []
 for entry in Path(browsers_path).iterdir():
     datas.append((str(entry), f"ms-playwright/{entry.name}"))
 
-# easyocr ships its own model loader that downloads on first use.
-# We pre-download in CI to avoid runtime internet need.
+# Bundle ddddocr ONNX models
+datas.extend(collect_data_files('ddddocr'))
 
 hiddenimports = [
     "playwright",
